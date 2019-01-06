@@ -1,0 +1,92 @@
+<html xmlns:margin-left="http://www.w3.org/1999/xhtml" xmlns:margin-right="http://www.w3.org/1999/xhtml">
+<head>
+    <title>OCR识别图片</title>
+    <link href="{{ url_for('static', filename='layui/css/layui.css') }}" rel="stylesheet" type="text/css"/>
+</head>
+<body style="text-align:center; background-image: url({{ url_for('static',filename='img/background.png') }})">
+<script src="{{ url_for('static',filename='layui/layui.js') }}"></script>
+
+<div style="align-content: center;width:61.8%;margin-left:19.1%;margin-right:19.1%">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>请上传文件</legend>
+    </fieldset>
+    <form action="/upload/" method="post">
+        <div class="layui-upload">
+            <button type="button" class="layui-btn" id="upload">上传图片</button>
+            <input class="layui-upload-file" type="file" accept="undefined" name="file">
+            <div class="layui-upload-list">
+                <img class="layui-upload-img" id="demo1">
+                <p id="demoText"></p>
+            </div>
+        </div>
+    </form>
+    <div id="result" style="display: none">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>识别结果:</legend>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend id="res_legend"></legend>
+            <div class="layui-field-box" id="res_words">
+
+            </div>
+        </fieldset>
+    </div>
+
+
+</div>
+<script>
+
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#upload'
+            , url: '/upload/'
+            , size: 1024 * 4
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                document.getElementById("result").style.display = "";
+                document.getElementById("res_legend").textContent = res['filename'];
+
+                for (let n = 0; n < res['words_result'].length; n++) {
+                    {#document.getElementById("res_words").textContent=res['words'];#}
+                    //获取div
+                    let div = document.getElementById("res_words");
+                    //添加新的P标签
+                    let p = document.createElement("p");
+                    p.textContent = res['words_result'][n]['words'];
+                    div.appendChild(p);
+                    //换行
+                    let br = document.createElement("br");
+                    div.appendChild(br);
+                }
+
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>
