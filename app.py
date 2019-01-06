@@ -15,23 +15,24 @@ app.debug = True
 def upload():
     if request.method == 'POST':
         image = request.files.get('file')
-        path = BASE_DIR + "/media/photo/"
-        file_path = path + image.filename
+        path = BASE_DIR + "/media/"
+
+        img_path = os.path.join(path, 'photo', image.filename)
+        txt_path = os.path.join(path, 'txt', image.filename.split('.')[0] + '.txt')
         if not os.path.exists(path):
             os.makedirs(path)
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        image.save(file_path)
+        if os.path.exists(img_path):
+            os.remove(img_path)
+        image.save(img_path)
 
         options = OCR_CONFIG['OPTIONS']
         utils = OCRUtils()
-        data = utils.ocr(utils.get_file_content(file_path), options)
-        words = reduce(lambda x, y: x + '<br>' + y, map(lambda x: x['words'], data['words_result']))
+        data = utils.ocr(utils.get_file_content(img_path), options)
+
+        words = reduce(lambda x, y: x + '\n' + y, map(lambda x: x['words'], data['words_result']))
+        utils.save_res(words, txt_path)
         filename = image.filename
-        # res = {
-        #     'filename': filename,
-        #     'words': data['words']
-        # }
+
         data['filename'] = filename
         return Response(json.dumps(data), mimetype='application/json')
 
@@ -43,4 +44,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8055)

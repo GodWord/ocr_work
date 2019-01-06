@@ -16,3 +16,8 @@ class OCRUtils:
     def get_file_content(file_path):
         with open(file_path, 'rb') as fp:
             return fp.read()
+
+    @staticmethod
+    def save_res(file, file_path):
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(file)
