@@ -6,7 +6,7 @@
 <body style="text-align:center; background-image: url({{ url_for('static',filename='img/background.png') }})">
 <script src="{{ url_for('static',filename='layui/layui.js') }}"></script>
 
-<div style="align-content: center;width:61.8%;margin-left:19.1%;margin-right:19.1%">
+<div style="align-content: center;">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
         <legend>请上传文件</legend>
     </fieldset>
@@ -71,6 +71,10 @@
                     let br = document.createElement("br");
                     div.appendChild(br);
                 }
+                ;
+                let div = document.getElementById("res_words");
+                let hr = document.createElement("hr");
+                div.appendChild(hr);
 
             }
             , error: function () {
