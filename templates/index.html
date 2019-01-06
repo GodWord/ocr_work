@@ -58,11 +58,13 @@
                 //上传成功
                 document.getElementById("result").style.display = "";
                 document.getElementById("res_legend").textContent = res['filename'];
-
+                let div = document.getElementById("res_words");
+                div.innerHTML = "";
                 for (let n = 0; n < res['words_result'].length; n++) {
                     {#document.getElementById("res_words").textContent=res['words'];#}
                     //获取div
                     let div = document.getElementById("res_words");
+
                     //添加新的P标签
                     let p = document.createElement("p");
                     p.textContent = res['words_result'][n]['words'];
@@ -72,8 +74,6 @@
                     div.appendChild(br);
                 }
                 ;
-                let div = document.getElementById("res_words");
-                let hr = document.createElement("hr");
                 div.appendChild(hr);
 
             }
