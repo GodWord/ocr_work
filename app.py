@@ -19,18 +19,18 @@ def upload():
 
         img_path = os.path.join(path, 'photo', image.filename)
         txt_path = os.path.join(path, 'txt', image.filename.split('.')[0] + '.txt')
-
-        options = OCR_CONFIG['OPTIONS']
-        utils = OCRUtils()
-        data = utils.ocr(utils.get_file_content(img_path), options)
-
-        words = reduce(lambda x, y: x + '\n' + y, map(lambda x: x['words'], data['words_result']))
         if not os.path.exists(path):
             os.makedirs(path)
         if os.path.exists(img_path):
             os.remove(img_path)
 
         image.save(img_path)
+        options = OCR_CONFIG['OPTIONS']
+        utils = OCRUtils()
+        data = utils.ocr(utils.get_file_content(img_path), options)
+
+        words = reduce(lambda x, y: x + '\n' + y, map(lambda x: x['words'], data['words_result']))
+
         utils.save_res(words, txt_path)
 
         data['filename'] = image.filename
