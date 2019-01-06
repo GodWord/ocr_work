@@ -12,7 +12,6 @@ OCR_CONFIG = {
     'SECRET_KEY': 'EkctmyzWn2MOw6o1HbBVosxRINUYsTtm',
     'OPTIONS': {
         'language_type': 'CHN_ENG',
-        '+words': 'true'
     }
 }
 
